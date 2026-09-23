@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: credit-risk-dashboard
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: credit-risk-dashboard
+  template:
+    metadata:
+      labels:
+        app: credit-risk-dashboard
+    spec:
+      containers:
+        - name: dashboard
+          image: credit-risk-dashboard:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "256Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: credit-risk-dashboard
+spec:
+  type: LoadBalancer
+  selector:
+    app: credit-risk-dashboard
+  ports:
+    - port: 80
+      targetPort: 80
+
